@@ -2,7 +2,9 @@
 const User=require('../models/user')
 
 module.exports.profile=function(req,res){
-    return res.render("<h1>My Profile<h1>");
+    return res.render('profile',{
+        title:'user_profile'
+    });
 }
 
 module.exports.signIn=function(req,res){

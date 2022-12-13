@@ -1,16 +1,17 @@
-const express= require('express');
-const cookieParser=require('cookie-parser');
-const port=8000;
-const app=express();
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const port = 8000;
+const app = express();
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 
-const session=require('express-session');
-const passport=require('passport');
-const passportLocal=require('./config/passport-local-strategy');
-const mongoStore=require('connect-mongo')(session);
-const sassMiddleware=require('node-sass-middleware');
-const flash= require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const passportLocal = require('./config/passport-local-strategy');
+const mongoStore = require('connect-mongo')(session);
+const sassMiddleware = require('node-sass-middleware');
+const flash = require('connect-flash');
+const customWare = require('./config/middleware');
 
 app.use(sassMiddleware({
     src:'./assets/scss',
@@ -50,7 +51,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 app.use(passport.setAuthenticatedUser);
+
+app.use(flash());
+app.use(customWare.setFlash);
 
 app.use('/',require('./routes')); 
 

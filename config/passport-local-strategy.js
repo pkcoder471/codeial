@@ -14,7 +14,7 @@ function(email,password,done){
         }
         if(!user || user.password!=password){
             console.log('error in signing in');
-            return done(null,flase)
+            return done(null,false)
         }
         return done(null,user);
     })

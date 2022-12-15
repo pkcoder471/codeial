@@ -1,4 +1,28 @@
-module.exports.createSession=function(req,res){
-    req.flash('success','logged in Successfully')
-    return res.redirect('/');
+const User = require('../../../models/user');
+const jwt = require('jsonwebtoken');
+
+
+
+module.exports.createSession= async function(req,res){
+    try{
+        let user = await User.findOne({email: req.body.email});
+
+        if(!user ){
+            return res.json(422,{
+                message: "Invalid username or password"
+            });
+        }
+
+        return res.json(200,{
+            message: 'Sign successful, here is your token ,please keep it safe',
+            data: {
+                token: jwt.sign(user.toJSON(),'codeial',{expiresIn:'10000'})
+            }
+        })
+    }catch(err){
+        console.log('******',err);
+        return res.json(500,{
+            message: "Internal Server Error"
+        })
+    }
 }

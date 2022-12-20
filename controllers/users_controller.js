@@ -79,6 +79,7 @@ module.exports.create=function(req,res){
      })
 }
 module.exports.createSession=function(req,res){
+    console.log("hello");
     req.flash('success','logged in Successfully')
     return res.redirect('/');
 }

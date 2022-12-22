@@ -16,8 +16,7 @@ module.exports.create= async function(req,res){
         post.comments.push(comment);
         post.save();
         console.log(comment);
-        comment = await comment
-        .populate('user');
+        comment = await comment.populate('user');
         commentMailer.newComment(comment);
         res.redirect('/');   
             
@@ -31,15 +30,17 @@ module.exports.create= async function(req,res){
 module.exports.destroy= async function(req,res){
     try{
     
-    let comment = Comment.findById(req.params.id);
+    let comment = await Comment.findById(req.params.id);
     
         if(comment.user==req.user.id){
             let postId=comment.post;
             comment.remove();
-
-            await Like.deleteMany({likeable: comment._id, onModel: 'Comment'});
             
             let post = Post.findByIdAndUpdate(postId,{$pull:{comments:req.params.id}});
+            
+            await Like.deleteMany({likeable: comment._id, onModel: 'Comment'});
+            
+            
                 
             return res.redirect('back');
             

@@ -13,6 +13,10 @@ module.exports.chatSockets = function(socketServer){
             console.log('joining request rec',data);
             socket.join(data.chatroom);
             io.in(data.chatroom).emit('user_joined',data);
+        }) 
+
+        socket.on('send_message',function(data){
+            io.in(data.chatroom).emit('receive_message',data)
         })
     });
 
